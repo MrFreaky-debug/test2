@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+  <h1>FAQ Portal</h1>
+
+  <div class="back-btn" id="backBtn">← Wróć</div>
+
+  <div class="search" id="searchBox">
+    <input type="text" id="searchInput" placeholder="Szukaj w FAQ..." />
+  </div>
+
+  <div class="tiles" id="mainTiles">
+    <div class="tile" data-main="system">System</div>
+    <div class="tile" data-main="product">Product</div>
+    <div class="tile" data-main="test">Test</div>
+  </div>
+
+  <div class="tiles" id="subTiles"></div>
+
+  <div class="faq-section" id="faqSection">
+    <h2 id="sectionTitle"></h2>
+    <div id="faqContainer"></div>
+  </div>
+
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
