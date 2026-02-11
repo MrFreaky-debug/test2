@@ -22,26 +22,28 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("mainTiles").style.display = "none";
     subTiles.style.display = "grid";
     backBtn.style.display = "block";
+    faqSection.style.display = "none"; // ukryj FAQ przy przejściu
+    searchBox.style.display = "none";
+
     subTiles.innerHTML = "";
 
     Object.keys(data[type]).forEach(key => {
       const div = document.createElement('div');
       div.className = 'tile';
-      div.innerText = key.toUpperCase();
-      div.onclick = () => loadFaq(type, key);
+      div.innerText = key;
+      div.onclick = () => loadFaq(type, key); // pokaż FAQ pod subTiles
       subTiles.appendChild(div);
     });
   }
 
   function loadFaq(type, key) {
-    currentLevel = "faq";
-    subTiles.style.display = "none";
     faqSection.style.display = "block";
     searchBox.style.display = "flex";
-    sectionTitle.innerText = key.toUpperCase();
+    sectionTitle.innerText = key;
     faqContainer.innerHTML = "";
 
-    data[type][key].forEach(item => {
+    const items = data[type][key] || [];
+    items.forEach(item => {
       const faq = document.createElement('div');
       faq.className = "faq-item";
       faq.innerHTML = `
@@ -53,16 +55,17 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       faqContainer.appendChild(faq);
     });
+
+    // przewiń do FAQ, jeśli dużo kafelków
+    faqSection.scrollIntoView({ behavior: 'smooth' });
   }
 
   backBtn.onclick = () => {
-    if (currentLevel === "faq") {
+    if (currentLevel === "sub") {
+      // wróć do kafelków głównych
+      subTiles.style.display = "none";
       faqSection.style.display = "none";
       searchBox.style.display = "none";
-      subTiles.style.display = "grid";
-      currentLevel = "sub";
-    } else {
-      subTiles.style.display = "none";
       document.getElementById("mainTiles").style.display = "grid";
       backBtn.style.display = "none";
       currentLevel = "main";
