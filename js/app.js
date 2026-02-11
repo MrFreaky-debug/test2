@@ -25,21 +25,22 @@ document.addEventListener('DOMContentLoaded', () => {
       subTiles.innerHTML = "";
 
   Object.keys(data[type]).forEach((key, index) => {
-    const div = document.createElement('div');
-    div.className = 'tile sub-tile';
-    div.style.animationDelay = `${index * 0.08}s`; // kaskada 80ms
-    div.innerText = key;
+  const div = document.createElement('div');
+  div.classList.add('tile', 'sub-tile'); // ✅ dodajemy sub-tile bez nadpisywania tile
+  div.style.animationDelay = `${index * 0.08}s`;
+  div.innerText = key;
 
-    div.onclick = () => {
-      if (activeSubTile) activeSubTile.classList.remove('active');
-      div.classList.add('active');
-      activeSubTile = div;
+  div.addEventListener('click', () => {
+    if (activeSubTile) activeSubTile.classList.remove('active');
+    div.classList.add('active');
+    activeSubTile = div;
 
-      loadFaq(type, key);
-    };
-
-    subTiles.appendChild(div);
+    loadFaq(type, key);
   });
+
+  subTiles.appendChild(div);
+});
+
 
 
         subTiles.appendChild(div);
