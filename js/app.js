@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       subTiles.style.display = "grid";
       backBtn.style.display = "block";
       faqSection.style.display = "none";
-      searchBox.style.display = "flex"; // włączamy wyszukiwarkę od razu
+      searchBox.style.display = "flex";
 
       subTiles.innerHTML = "";
 
@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
         div.innerText = key;
 
         div.onclick = () => {
-          // usuń aktywne z poprzedniego
           if (activeSubTile) activeSubTile.classList.remove('active');
           div.classList.add('active');
           activeSubTile = div;
@@ -51,26 +50,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = data[type][key] || [];
     items.forEach(item => {
       const faq = document.createElement('div');
-      faq.className = "faq-item active"; // animacja fade-in
+      faq.className = "faq-item active";
       faq.innerHTML = `
         <div class="faq-question">${item.q} <span>+</span></div>
         <div class="faq-answer"><p>${item.a}</p></div>
       `;
-
-      const question = faq.querySelector('.faq-question');
-      question.addEventListener('click', () => {
+      faq.querySelector('.faq-question').addEventListener('click', () => {
         faq.classList.toggle('open');
       });
-
       faqContainer.appendChild(faq);
     });
 
-    // przewiń do FAQ
-    faqSection.scrollIntoView({ behavior: 'smooth' });
+    // Płynny scroll z lekkim opóźnieniem
+    setTimeout(() => {
+      faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
   }
 
   backBtn.onclick = () => {
-    // wracamy do kafelków głównych
     subTiles.style.display = "none";
     faqSection.style.display = "none";
     searchBox.style.display = "none";
@@ -81,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.value = "";
   };
 
-  // Wyszukiwanie działa dla wszystkich FAQ
   searchInput.addEventListener('input', e => {
     const query = e.target.value.toLowerCase();
     document.querySelectorAll('.faq-item').forEach(item => {
