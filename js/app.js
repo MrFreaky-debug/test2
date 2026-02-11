@@ -14,41 +14,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   mainTiles.forEach(tile => {
     tile.addEventListener('click', () => {
-      showSubTiles(tile.dataset.main);
+      const type = tile.dataset.main;
+      currentLevel = "sub";
+      document.getElementById("mainTiles").style.display = "none";
+      subTiles.style.display = "grid";
+      backBtn.style.display = "block";
+      faqSection.style.display = "none";
+      searchBox.style.display = "flex"; // włączamy wyszukiwarkę od razu
+
+      subTiles.innerHTML = "";
+
+      Object.keys(data[type]).forEach(key => {
+        const div = document.createElement('div');
+        div.className = 'tile';
+        div.innerText = key;
+
+        div.onclick = () => {
+          // usuń aktywne z poprzedniego
+          if (activeSubTile) activeSubTile.classList.remove('active');
+          div.classList.add('active');
+          activeSubTile = div;
+
+          loadFaq(type, key);
+        };
+
+        subTiles.appendChild(div);
+      });
     });
   });
 
-  function showSubTiles(type) {
-    currentLevel = "sub";
-    document.getElementById("mainTiles").style.display = "none";
-    subTiles.style.display = "grid";
-    backBtn.style.display = "block";
-    faqSection.style.display = "none";
-    searchBox.style.display = "none";
-
-    subTiles.innerHTML = "";
-
-    Object.keys(data[type]).forEach(key => {
-      const div = document.createElement('div');
-      div.className = 'tile';
-      div.innerText = key;
-
-      div.onclick = () => {
-        // usuń aktywne z poprzedniego
-        if (activeSubTile) activeSubTile.classList.remove('active');
-        div.classList.add('active');
-        activeSubTile = div;
-
-        loadFaq(type, key);
-      };
-
-      subTiles.appendChild(div);
-    });
-  }
-
   function loadFaq(type, key) {
     faqSection.style.display = "block";
-    searchBox.style.display = "flex";
     sectionTitle.innerText = key;
     faqContainer.innerHTML = "";
 
@@ -74,17 +70,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   backBtn.onclick = () => {
-    if (currentLevel === "sub") {
-      subTiles.style.display = "none";
-      faqSection.style.display = "none";
-      searchBox.style.display = "none";
-      document.getElementById("mainTiles").style.display = "grid";
-      backBtn.style.display = "none";
-      currentLevel = "main";
-      activeSubTile = null;
-    }
+    // wracamy do kafelków głównych
+    subTiles.style.display = "none";
+    faqSection.style.display = "none";
+    searchBox.style.display = "none";
+    document.getElementById("mainTiles").style.display = "grid";
+    backBtn.style.display = "none";
+    currentLevel = "main";
+    activeSubTile = null;
+    searchInput.value = "";
   };
 
+  // Wyszukiwanie działa dla wszystkich FAQ
   searchInput.addEventListener('input', e => {
     const query = e.target.value.toLowerCase();
     document.querySelectorAll('.faq-item').forEach(item => {
