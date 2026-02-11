@@ -24,18 +24,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
       subTiles.innerHTML = "";
 
-      Object.keys(data[type]).forEach(key => {
-        const div = document.createElement('div');
-        div.className = 'tile';
-        div.innerText = key;
+  Object.keys(data[type]).forEach((key, index) => {
+    const div = document.createElement('div');
+    div.className = 'tile sub-tile';
+    div.style.animationDelay = `${index * 0.08}s`; // kaskada 80ms
+    div.innerText = key;
 
-        div.onclick = () => {
-          if (activeSubTile) activeSubTile.classList.remove('active');
-          div.classList.add('active');
-          activeSubTile = div;
+    div.onclick = () => {
+      if (activeSubTile) activeSubTile.classList.remove('active');
+      div.classList.add('active');
+      activeSubTile = div;
 
-          loadFaq(type, key);
-        };
+      loadFaq(type, key);
+    };
+
+    subTiles.appendChild(div);
+  });
+
 
         subTiles.appendChild(div);
       });
