@@ -38,12 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFaq(type, key);
   });
 
-  subTiles.appendChild(div);
-});
-
-
-
-        subTiles.appendChild(div);
+   subTiles.appendChild(div);
       });
     });
   });
