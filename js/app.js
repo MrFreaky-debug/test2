@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
 
   let currentLevel = "main";
+  let activeSubTile = null;
 
   mainTiles.forEach(tile => {
     tile.addEventListener('click', () => {
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("mainTiles").style.display = "none";
     subTiles.style.display = "grid";
     backBtn.style.display = "block";
-    faqSection.style.display = "none"; // ukryj FAQ przy przejściu
+    faqSection.style.display = "none";
     searchBox.style.display = "none";
 
     subTiles.innerHTML = "";
@@ -31,7 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const div = document.createElement('div');
       div.className = 'tile';
       div.innerText = key;
-      div.onclick = () => loadFaq(type, key); // pokaż FAQ pod subTiles
+
+      div.onclick = () => {
+        // usuń aktywne z poprzedniego
+        if (activeSubTile) activeSubTile.classList.remove('active');
+        div.classList.add('active');
+        activeSubTile = div;
+
+        loadFaq(type, key);
+      };
+
       subTiles.appendChild(div);
     });
   }
@@ -45,30 +55,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = data[type][key] || [];
     items.forEach(item => {
       const faq = document.createElement('div');
-      faq.className = "faq-item";
+      faq.className = "faq-item active"; // animacja fade-in
       faq.innerHTML = `
         <div class="faq-question">${item.q} <span>+</span></div>
         <div class="faq-answer"><p>${item.a}</p></div>
       `;
-      faq.querySelector('.faq-question').onclick = () => {
-        faq.classList.toggle("active");
-      };
+
+      const question = faq.querySelector('.faq-question');
+      question.addEventListener('click', () => {
+        faq.classList.toggle('open');
+      });
+
       faqContainer.appendChild(faq);
     });
 
-    // przewiń do FAQ, jeśli dużo kafelków
+    // przewiń do FAQ
     faqSection.scrollIntoView({ behavior: 'smooth' });
   }
 
   backBtn.onclick = () => {
     if (currentLevel === "sub") {
-      // wróć do kafelków głównych
       subTiles.style.display = "none";
       faqSection.style.display = "none";
       searchBox.style.display = "none";
       document.getElementById("mainTiles").style.display = "grid";
       backBtn.style.display = "none";
       currentLevel = "main";
+      activeSubTile = null;
     }
   };
 
